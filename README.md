@@ -5,7 +5,7 @@ Matlab code to match brain fascicles using functional maps
 
 ## Usage
 
-The library [CVX](http://cvxr.com/cvx/) is required, download and load the library by running cvx_startup.m.
+The library [CVX](http://cvxr.com/cvx/) is required, download and load the library and run cvx_startup.m.
 
 Load the fascicle data using loadFascicle.m
 Then run on of the examples :
