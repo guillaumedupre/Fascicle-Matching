@@ -1,4 +1,4 @@
-% This script compute a functional map between two fascicles
+% This script computes a functional map between two fascicles
 
 k=30; % Number of clusters
 

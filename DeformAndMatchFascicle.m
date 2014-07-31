@@ -1,4 +1,4 @@
-% This script apply several times a deformation to a given fascicle and
+% This script applies several times a deformation to a given fascicle and
 % compute functional maps between the modified fascicles and the original
 % one
 addpath('deformations/');
