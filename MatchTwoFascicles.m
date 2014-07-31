@@ -11,6 +11,13 @@ fibers{2}=fascicles(2).fascicles(2).fibers;
 [fibers{1},startPoint,endPoint]=cleanFibers(fibers{1});
 [fibers{2},startPoint,endPoint]=cleanFibers(fibers{2});
 
+% Compute a cross-section basis used to apply deformations
+V=endPoint-startPoint;
+V=V/norm(V);
+V1=[1,0,-V(1)/V(3)];
+V2=[0,1,-V(2)/V(3)];
+basis=orth([V1;V2]')';
+
 disp('Preprocess fascicles');
 clear allPoints;clear M;clear P;clear D;
 for i=1:2,
