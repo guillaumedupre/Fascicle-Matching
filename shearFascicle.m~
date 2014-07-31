@@ -1,4 +1,6 @@
- function [fibers,basis] = shearFascicle(fibers,b,e,shift1,shift2)
+function [fibers,basis] = shearFascicle(fibers,b,e,shift1,shift2)
+
+
 s=size(fibers,1);
 allPoints=[];
 

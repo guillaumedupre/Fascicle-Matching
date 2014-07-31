@@ -1,5 +1,5 @@
-function [allPoints,M,A,DF] = preprocess(fibers)
-
+function [M,P,allPoints] = clusterFascicle(fibers,k)
+% This function cluster the fascicles using the k-means algorithm
 
 s=size(fibers,1);
 allPoints=[];
@@ -8,7 +8,6 @@ for i=1:s,
 end
 N=size(allPoints,1);
 opts=statset('MaxIter',500);
-k=30;
 [IDX,Centroid] = kmeans(allPoints,k,'options',opts);
 
 % Compute mask
@@ -29,17 +28,8 @@ for i=1:s,
     c=c+1;
 end
 
-% Compute density functions of fibers
-DF=zeros(k,s);
-beg=zeros(s,1);
-en=beg;
-j=1;
-for i=1:s,
-   beg(i)=j; 
-   e=j+size(fibers{i},2)-1;
-   en(i)=e;
-   DF(:,i)=full(sum(M(j:e,:))/sum(sum(M(j:e,:))))';
-   j=e+1;
-end
+% Compute the randonm walk probability transition matrix by
+% normalizing the adjacency matrix
+P=A./repmat(sum(A),[k 1]);
 end
 
