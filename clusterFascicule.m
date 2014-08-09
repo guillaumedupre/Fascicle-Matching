@@ -1,14 +1,13 @@
-function [M,P,allPoints] = clusterFascicle(fibers,k)
+function [M,P,allPoints,centroid] = clusterFascicle(fibers,k)
 % This function cluster the fascicles using the k-means algorithm
 
 s=size(fibers,1);
-allPoints=[];
-for i=1:s,
-   allPoints=[allPoints;fibers{i}'];
-end
+
+allPoints=fascicleVertices(fibers);
+
 N=size(allPoints,1);
 opts=statset('MaxIter',500);
-[IDX,Centroid] = kmeans(allPoints,k,'options',opts);
+[IDX,centroid] = kmeans(allPoints,k,'options',opts);
 
 % Compute mask
 M=sparse(N,k);

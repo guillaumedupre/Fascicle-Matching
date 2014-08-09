@@ -4,8 +4,8 @@
 addpath('deformations/');
 
 k=30; % Number of clusters
-N=1; % Number of modified fascicles
-maxTransformationParameter=[0 15]; % Maximum value of the parameters of the transformation applied
+N=5; % Number of modified fascicles
+maxTransformationParameter=[0 25]; % Maximum value of the parameters of the transformation applied
 
 clear fibers;
 % Load the first (original) fascicle
@@ -35,22 +35,41 @@ for i=1:N,
     disp(i);
     % Compute the fascicle i+1 by applying a deformation to the first
     % fascicle
-    fibers{i+1}=growRegionFascicule(fibers{1},startPoint,endPoint,basis,transformationParameters1(i),transformationParameters2(i),[0.2,0.5]);
+    deformedFascicle=growRegionFascicule(fibers{1},startPoint,endPoint,basis,transformationParameters1(i),transformationParameters2(i),[0.2,0.5]);
     %fibers{i+1}=shearFascicle(fibers{1},startPoint,endPoint,basis,transformationParameters1(i),transformationParameters2(i));
     
+    % Store the fascicle before resampling (in order to compute the error
+    % later)
+    fibersNotResampled{i+1}=deformedFascicle;
     
-    % Resample the fascicle 
-    fibers{i+1}=resampleFibers(fibers{i+1});
+    % Resample the fiber
+    fibers{i+1}=resampleFibers(deformedFascicle);
 end
 
 disp('Preprocess fascicles');
-clear allPoints;clear M;clear P;clear D;
+clear allPoints;clear M;clear P;clear D;clear clusterGroundtruth;
 for i=1:(N+1),
         disp(i)
         % Preprocess the fasicle : cluster the fascicle 
-        [M{i},P{i},allPoints{i}] = clusterFascicule(fibers{i},k);
+        [M{i},P{i},allPoints{i},centroid{i}] = clusterFascicule(fibers{i},k);
         % Compute the distance descriptor
         D{i} = descriptorDistance(fibers{i},M{i});
+        
+        % Compute cluster groundtruth
+        if i>1,
+             % Array of vertices of fascicle i before resampling 
+              verticesNotResample=fascicleVertices(fibersNotResampled{i});
+             % Corresponding cluster to each point 
+              matchedCluster=dsearchn(centroid{i},verticesNotResample);
+           for c=1:k, % for each cluster
+              % Cluster index corresponding to each point in cluster c on fascicle 1 
+              clusterIndices=matchedCluster(find(M{1}(:,c)));
+              % Bin count of cluster indices
+              clusterBinCount=histc(clusterIndices,1:k);
+              groundtruth{i}(:,c)=clusterBinCount/size(clusterIndices,1);
+            
+           end
+        end
 end
 
  
@@ -71,6 +90,11 @@ for i=2:(N+1),
 end
 F{1}=eye(k); % We set the functional map from fascicule 1 to itself to be the identity
 
+% Compute error using groundtruth
+error=[];
+for i=2:(N+1);
+   error=[error,norm(groundtruth{i}-F{i},'fro')]; 
+end
 
 
 disp('Plot Fascicles');
