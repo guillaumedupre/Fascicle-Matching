@@ -4,7 +4,7 @@
 addpath('deformations/');
 
 k=30; % Number of clusters
-N=3; % Number of modified fascicles
+N=1; % Number of modified fascicles
 maxTransformationParameter=[0 15]; % Maximum value of the parameters of the transformation applied
 
 clear fibers;
@@ -35,8 +35,8 @@ for i=1:N,
     disp(i);
     % Compute the fascicle i+1 by applying a deformation to the first
     % fascicle
-    %fibers{i+1}=growRegionFascicule(fibers{1},startPoint,endPoint,basis,transformationParameters1(i),transformationParameters2(i),[0.2,0.5]);
-    fibers{i+1}=shearFascicle(fibers{1},startPoint,endPoint,basis,transformationParameters1(i),transformationParameters2(i));
+    fibers{i+1}=growRegionFascicule(fibers{1},startPoint,endPoint,basis,transformationParameters1(i),transformationParameters2(i),[0.2,0.5]);
+    %fibers{i+1}=shearFascicle(fibers{1},startPoint,endPoint,basis,transformationParameters1(i),transformationParameters2(i));
     
     
     % Resample the fascicle 

@@ -1,4 +1,4 @@
- function fibers2 = growRegionFascicule(fibers,startPoint,endPoint,basis,shift1,shift2,I)
+ function fibers = growRegionFascicule(fibers,startPoint,endPoint,basis,shift1,shift2,I)
  % This function transforms a fascicle. It grows a chosen area of a
  % fascicle.
 
@@ -24,11 +24,10 @@ L=pdist2(startPoint,endPoint);
 
 % Vector of the direction of the growth (linear combination of the vectors
 % of the cross-section basis)
-growthDirection=shift1*basis(1,:)+shift2*basis(2,:);
+growthDirection=shift1*basis(1,:)+shift2*basis(2,:)
 
 % Number of fibers
 s=size(fibers,1);
-clear fibers2;
 for i=1:s,
    
    % Number of vertices of fibers{i}
@@ -41,7 +40,7 @@ for i=1:s,
    mainAxisProjection=pointVectors*mainAxis'/L;
    
    % Displacement value
-   displacement=-(mainAxisProjection-I(1)).*(mainAxisProjection-I(2));
+   displacement=(mainAxisProjection-I(1)).*(mainAxisProjection-I(2));
    displacement=displacement/max(displacement);
    
    % Projection of the points on the vector of the direction of the growth
@@ -53,9 +52,8 @@ for i=1:s,
    
    % Move the points
    %displacement(ind).*growthDirectionProjection(ind)
-   fibers2{i}=fibers{i};
-   fibers2{i}(:,ind)=(fibers{i}(:,ind)'+(displacement(ind).*growthDirectionProjection(ind)*growthDirection))';
+   fibers{i}(:,ind)=(fibers{i}(:,ind)'+(displacement(ind).*growthDirectionProjection(ind)*growthDirection))';
 
 end
-fibers2=fibers2';
+
 end
