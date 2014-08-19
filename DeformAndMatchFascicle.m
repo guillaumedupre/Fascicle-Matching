@@ -4,8 +4,8 @@
 addpath('deformations/');
 
 k=30; % Number of clusters
-N=5; % Number of modified fascicles
-maxTransformationParameter=[0 25]; % Maximum value of the parameters of the transformation applied
+N=3; % Number of modified fascicles
+maxTransformationParameter=[0 15]; % Maximum value of the parameters of the transformation applied
 
 clear fibers;
 % Load the first (original) fascicle
